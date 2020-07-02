@@ -79,7 +79,10 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------------Prime Factorization------------------------------//
 
-vpii prime_factors;
+// Time Complexity: O(sqrt(n))
+
+
+vpii prime_factors; // vector pair to store the primes and its power in the prime factorization of the number
 
 void PrimeFactorization(int n)
 {
@@ -90,9 +93,9 @@ void PrimeFactorization(int n)
         n/=2;
         pwr++;  // power of that prime number
     }
-
     if(pwr!=0)
         prime_factors.pb(mp(2,pwr));
+
 
     for(int i=3;i<=sqrt(n);i+=2)
     {
