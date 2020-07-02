@@ -84,7 +84,7 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 //smaller than n when n is smaller than 10 million(1e6).
 
 // Time Complexity: O(n*log(log(n)))
-// Space Complexity: 
+// Space Complexity: O(n)
 
 vector<bool>prime(1000001,true);
 
