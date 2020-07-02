@@ -1,2 +1,2 @@
-Prime Factorization of 315:
-3^2 + 5^1 + 7^1 + 
+Prime Factorization of 72 is: 
+2 2 2 3 3 
