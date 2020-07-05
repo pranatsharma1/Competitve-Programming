@@ -1,1 +1,1 @@
-(x^n) mod p is :2
+GCD of the two numbers is: 6
