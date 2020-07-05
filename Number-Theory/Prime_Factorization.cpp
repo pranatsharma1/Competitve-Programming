@@ -123,7 +123,7 @@ void solve()
 
     cout<<"Prime Factorization of "<<n<<":\n";
     for(auto i:prime_factors)
-        cout<<i.F<<"^"<<i.S<<" + ";
+        cout<<i.F<<"^"<<i.S<<" * ";
     
     br;
     
