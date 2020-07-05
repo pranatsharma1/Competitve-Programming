@@ -105,7 +105,8 @@ void PrimeFactorization(int n)
             n/=i;
             pwr++;
         }
-        prime_factors.pb(mp(i,pwr));
+        if(pwr!=0)
+            prime_factors.pb(mp(i,pwr));
     }
 
     if(n>1)
