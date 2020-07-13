@@ -1,2 +1,1 @@
-GCD of a and b is 5
-x : 1  y : -2
+Multiplicative Inverse of a modulo m is 4
