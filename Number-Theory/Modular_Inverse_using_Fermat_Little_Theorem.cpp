@@ -77,56 +77,52 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 #define dbg(...) 50
 #endif
 
-//----------Modular Invese of a number using Extended Euclidean Algorithm--------//
+//--------------Modular Inverse using Fermat Little Theorem----------------------//
 
-// Note that multiplicative inverse of "a modulo m" exists if and only if gcd(a,m)=1.
+// This method works only when m is prime.
 
-// Time Complexity : O(log m)
+// Time Complexity :O(log m)
 
-int gcdExtended(int a, int b, int *x, int *y)  
-{  
-    if (a == 0)  
-    {  
-        *x = 0;  
-        *y = 1;  
-        return b;  
-    }  
-    
-    int x1, y1;
-    int g = gcdExtended(b%a, a, &x1, &y1);  
+int power(int a , int n, int m)
+{
+    int res=1;
 
-    // ax+by=gcd(a,b)
-    *x = y1 - (b/a) * x1;  
-    *y = x1;  
-  
-    return g;  
+    while(n)
+    {
+        if(n%2==1)
+        {
+            res=(res%m * a%m)%m;
+            n--;
+        }
+        else
+        {
+            a=(a%m * a%m)%m;
+            n/=2;
+        }
+    }
+    return res;
 }
-
 
 int modInverse(int a, int m) 
 { 
-    int x, y; 
-
-    // ax+my=1
-    int g = gcdExtended(a, m, &x, &y); 
-
-    int res;
+    int g = gcd(a, m); 
+    int inv;
     if (g != 1) 
-        return -1;  // means modular multiplicative inverse does not exist.
-    else
-        res = (x%m + m) % m; 
+        return -1;
+    else 
+        inv=power(a, m-2, m);
 
-    return res;
-
+    return inv;     
+    
 }
-
 
 
 void solve()
 {    
-    int a = 3, m = 11; 
-    int ans=modInverse(a, m);
-    cout<<"Multiplicative Inverse of a modulo m is "<<ans<<endl; 
+    
+    int a=3,m=11;
+    cout<<modInverse(a,m)<<endl;
+
 }    
 
 int32_t main()
