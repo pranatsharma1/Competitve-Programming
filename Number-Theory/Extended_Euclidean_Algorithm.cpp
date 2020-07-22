@@ -31,8 +31,8 @@ using namespace __gnu_pbds;
 #define maxv(a)             *max_element(all(a))
 #define sumv(a)             accumulate(all(a),0)
 
-#define lb                  lower_bound         // returns pointer to the "first position of num" if number is present in the container. Returns pointer to the "position of next higher number greater than num" if num is not present.   
-#define ub                  upper_bound         // returns pointer to the "first position of the next higher number than last occurence of num" if num is present in the container. Returns pointer to the position of next higher number than num if container does not contain occurence of num.
+#define lb                  lower_bound         //returns pointer to the "first position of num" if number is present in the container. Returns pointer to the "position of next higher number greater than num" if num is not present.   
+#define ub                  upper_bound         //returns pointer to the "first position of the next higher number than last occurence of num" if num is present in the container. Returns pointer to the position of next higher number than num if container does not contain occurence of num.
 #define desc                greater<int>()
 #define pb                  emplace_back
 #define mp                  make_pair
