@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Input and Output Files
+input.txt
+output.txt
+outputf.txt
+error.txt
