@@ -84,7 +84,6 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 //   remainder 0.
 
 // Time Complexity: O(log(min(a,b)))
-
 int gcd(int a,int b)
 {
     if(b==0)
