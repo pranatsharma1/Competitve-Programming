@@ -85,7 +85,6 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 // Time Complexity: O(n*log(log(n)))
 // Space Complexity: O(n)
-
 vector<bool>prime(1000001,true);
 
 void sieve()
