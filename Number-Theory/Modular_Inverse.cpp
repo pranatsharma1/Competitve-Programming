@@ -79,6 +79,7 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //----------Modular Invese of a number using Extended Euclidean Algorithm--------//
 
+
 // Note that multiplicative inverse of "a modulo m" exists if and only if gcd(a,m)=1.
 
 // Time Complexity : O(log m)
