@@ -1,1 +1,0 @@
-Multiplicative Inverse of a modulo m is 4
