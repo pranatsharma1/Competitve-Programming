@@ -79,7 +79,6 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 
 //----------------------Sieve Of Eratosthenes-------------------------------------//
-
 //The sieve of Eratosthenes is one of the most efficient ways to find all primes 
 //smaller than n when n is smaller than 10 million(1e6).
 
