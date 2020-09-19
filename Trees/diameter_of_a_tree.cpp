@@ -78,23 +78,28 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 #endif
 
 
+/*------------------------------------------------------------------------------//
+
+    Diameter of a Tree is the longest path between any two nodes of a tree
+
+Problem Link : https://www.spoj.com/problems/PT07Z/ (Longest Path in a Tree - SPOJ)
+
+Algorithm : The longest path will always occur between two leaf nodes. 
+We start DFS from a random node (1 generally ) and then see which node is farthest 
+from it. Let the node farthest be maxNode . It is clear that maxNode will always 
+be a leaf node and a corner of DFS. Now if we start DFS from maxNode and check the 
+farthest node from it, we will get the diameter of the tree.
+
+Time Complexity: O(n) for 2 dfs calls.
+Note: DFS call in a tree takes O(n) time.
+
+Resource : CodenCode (https://www.youtube.com/watch?v=x5ZH4pnts7Q&list=PL2q4fbVm1Ik6DCzm9XZJbNwyHtHGclcEh&index=15) */
 
 
 
 
 //------------------------------Main Code Starts--------------------------------//
 
-// Diameter of a Tree is the longest path between any two nodes of a tree
-
-// Problem Link : https://www.spoj.com/problems/PT07Z/ (Longest Path in a Tree - SPOJ)
-
-/* The longest path will always occur between two leaf nodes. 
-We start DFS from a random node (1 generally ) and then see which node is farthest 
-from it. Let the node farthest be maxNode . It is clear that maxNode will always 
-be a leaf node and a corner of DFS. Now if we start DFS from maxNode and check the 
-farthest node from it, we will get the diameter of the tree. */
-
-// Resource : CodenCode (https://www.youtube.com/watch?v=x5ZH4pnts7Q&list=PL2q4fbVm1Ik6DCzm9XZJbNwyHtHGclcEh&index=15)
 
 const int MAXN = 10007;
 
