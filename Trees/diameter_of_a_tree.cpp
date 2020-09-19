@@ -84,6 +84,9 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------------Main Code Starts--------------------------------//
 
+// Diameter of a Tree is the longest path between any two nodes of a tree
+
+// Problem Link : https://www.spoj.com/problems/PT07Z/ (Longest Path in a Tree - SPOJ)
 
 /* The longest path will always occur between two leaf nodes. 
 We start DFS from a random node (1 generally ) and then see which node is farthest 
