@@ -76,29 +76,52 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
+// Bridges in a graph are those edges on whose removal, the graph is broken domw into two or more components.
+
+// Time Complexity : O(N + E)
+// Space Complexity : O(N + N)
+// Auxilary Sapce Complexity : O(N) for dfs call
+
+const int N = 1e5 + 5;
 vector<int>adj[N];
 vector<bool>vis(N, false);
+vector<int>tin(N, -1);  // time of insertion or entry time for node
+vector<int>low(N, -1);  // lowest time of insertion (of a node) among all it's adjacent nodes (except the parent)
+int timer = 0;
+vector<pair<int,int>>bridges;
 
-bool checkForCycle(int node, int parent)
+void dfs(int node, int parent)
 {
     vis[node] = true;
-
-    for(int i : adj[node])
+    
+    tin[node] = low[node] = timer++;
+    
+    for(auto i : adj[node]) // traversing the adjacent nodes of current node
     {
+        if(i == parent)
+            continue;
+            
         if(!vis[i])
         {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
+            dfs(i, node);
+            
+            low[node] = min(low[node], low[i]);
+            
+            if(low[i] > tin[node])
+            {
+                bridges.push_back({node, i});
+            }
+
         }
-        else if(i != parent)
-            return true;
+        else    // It means edge between them cannot be a bridge, because, this node has already been visited before.
+        {
+            low[node] = min(low[node], tin[i]);
+        }
+
     }
 
-    return false;
+}
 
-} 
 
 
 void solve()
@@ -116,21 +139,18 @@ void solve()
         adj[v].push_back(u);
 
     }    
-        
-    // nodes are from 1 to n // 1 based indexing
+
     for(int i = 1; i <= n; i++)
     {
         if(!vis[i])
-        {
-            if(checkForCycle(i,-1))
-            {
-                cout << "Cycle found\n";
-                return ;
-            }
-        }
+            dfs(i, -1);
     }
-    
-    cout << "No Cycle found\n";
+
+    cout << "Bridges in the given graph are : \n";
+    for(auto i : bridges)
+        cout << i.F << " -- " << i.S << endl;
+
+
 
 }
 

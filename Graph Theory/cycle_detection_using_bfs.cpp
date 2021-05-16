@@ -127,7 +127,8 @@ void solve()
         adj[v].push_back(u);
 
     }
-
+    
+    // nodes are from 1 to n
     for(int i = 1; i <= n; i++)
     {
         if(!vis[i])

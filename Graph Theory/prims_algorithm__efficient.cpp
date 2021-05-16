@@ -76,30 +76,10 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
-vector<int>adj[N];
-vector<bool>vis(N, false);
+// Time Complexity : O(N + E)logN == O(NlogN)
 
-bool checkForCycle(int node, int parent)
-{
-    vis[node] = true;
-
-    for(int i : adj[node])
-    {
-        if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
-    }
-
-    return false;
-
-} 
-
+const int N = 1e5 + 5;
+vector<pair<int,int>>adj[N];
 
 void solve()
 {
@@ -107,31 +87,56 @@ void solve()
     int n, m;
     cin >> n >> m;
 
+    // nodes are from 0 to n - 1
     for(int i = 0; i < m; i++)
     {
-        int u, v;
-        cin >> u >> v;
+        int u, v, wt;
+        cin >>  u >> v >> wt;
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        adj[u].push_back({v, wt});
+        adj[v].push_back({u, wt});
 
     }    
-        
-    // nodes are from 1 to n // 1 based indexing
-    for(int i = 1; i <= n; i++)
+
+    vector<int>key(n, LLONG_MAX);
+    vector<bool>marked(n, false);
+    vector<int>parent(n, -1);
+
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>>pq;
+    key[0] = 0;
+    parent[0] = -1;
+
+    pq.push({0, 0});    // dist - node
+
+    while(!pq.empty())
     {
-        if(!vis[i])
+        int node = pq.top().S;
+        pq.pop();
+
+        marked[node] = true;
+
+        for(auto i : adj[node])
         {
-            if(checkForCycle(i,-1))
+            if(marked[i.F] == false and key[i.F] > i.S)
             {
-                cout << "Cycle found\n";
-                return ;
+                parent[i.F] = node;
+                key[i.F] = i.S;
+                pq.push({key[i.F], i.F});
             }
         }
-    }
-    
-    cout << "No Cycle found\n";
 
+    }
+
+    cout << "MST of the given graph is :\n";
+    for(int i = 1; i < n; i++)
+        cout << parent[i] << " -- " << i << endl;
+
+    int minCost = 0;
+    for(int i = 0; i < n; i++)
+        if(key[i] != LLONG_MAX)
+            minCost += key[i];
+    cout << "Cost of the MST is : " << minCost << endl;
+ 
 }
 
 int32_t main()

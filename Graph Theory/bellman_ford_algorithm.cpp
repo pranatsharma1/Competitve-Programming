@@ -76,30 +76,23 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
-vector<int>adj[N];
-vector<bool>vis(N, false);
+// Bellman Ford Algorithm is useful to find shortest source path 
+// when there are negative weight edges as Dijsktra's algorithm fails in this case.
+// It is also used to detect negative weight cycle in the graph.
 
-bool checkForCycle(int node, int parent)
+// Time Complexity : O(N - 1) * O(E)
+// Space Complexity : O(N)
+
+struct edge
 {
-    vis[node] = true;
-
-    for(int i : adj[node])
+    int u, v, wt;
+    edge(int x, int y, int weight)
     {
-        if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
+        u = x;
+        v = y;
+        wt = weight;
     }
-
-    return false;
-
-} 
-
+};
 
 void solve()
 {
@@ -107,30 +100,51 @@ void solve()
     int n, m;
     cin >> n >> m;
 
+    int source;
+    cin >> source;
+
+    vector<edge>edges;
     for(int i = 0; i < m; i++)
     {
-        int u, v;
-        cin >> u >> v;
+        int u, v, wt;
+        cin >> u >> v >> wt;
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        edges.push_back(edge(u, v, wt));
+    }
 
-    }    
-        
-    // nodes are from 1 to n // 1 based indexing
-    for(int i = 1; i <= n; i++)
+    vector<int>dist(n, INT_MAX);
+    dist[source] = 0;
+
+    for(int i = 1; i <= n - 1; i++)     // relaxing n - 1 times
     {
-        if(!vis[i])
+        for(auto j : edges)
         {
-            if(checkForCycle(i,-1))
-            {
-                cout << "Cycle found\n";
-                return ;
-            }
+            if(dist[j.u] + j.wt < dist[j.v])
+                dist[j.v] = dist[j.u] + j.wt;
+        }
+    }   
+
+    // relaxing one more time to check if there exists a negative cycle or not
+    bool neg_cycle = false;
+    for(auto i : edges)
+    {
+        if(dist[i.u] + i.wt < dist[i.v])
+        {
+            cout << "Negative Cycle!\n";
+            neg_cycle = true;
+            break;
         }
     }
     
-    cout << "No Cycle found\n";
+    if(!neg_cycle)
+    {
+        cout << "Distances from source " << source << " are : \n";
+        for(int i = 0; i < n; i++)
+        {
+            cout << i << " : " << dist[i] << endl;
+        }
+    }
+
 
 }
 

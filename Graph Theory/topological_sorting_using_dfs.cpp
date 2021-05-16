@@ -105,7 +105,7 @@ void solve()
     int n, m;
     cin >> n >> m;
 
-    for(int i=0;i<m;i++)
+    for(int i = 0; i < m; i++)
     {
         int u, v;
         cin >> u >> v;
@@ -113,8 +113,9 @@ void solve()
         adj[u].push_back(v);
 
     }   
-
-    for(int i = 0; i <= n; i++)
+    
+    // nodes are from 0 to n - 1 // 0 based indexing
+    for(int i = 0; i < n; i++)
     {
         if(!vis[i])
             dfs(i);

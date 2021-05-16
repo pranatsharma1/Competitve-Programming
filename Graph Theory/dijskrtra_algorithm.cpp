@@ -76,30 +76,12 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
-vector<int>adj[N];
+// Time Complexity : O(N + E) logN == O(NlogN)
+// Space Complexity : O(N) + O(N) 
+
+const int N = 1e5 + 5;
+vector<pair<int,int>>adj[N];
 vector<bool>vis(N, false);
-
-bool checkForCycle(int node, int parent)
-{
-    vis[node] = true;
-
-    for(int i : adj[node])
-    {
-        if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
-    }
-
-    return false;
-
-} 
-
 
 void solve()
 {
@@ -107,30 +89,48 @@ void solve()
     int n, m;
     cin >> n >> m;
 
+    int source;
+    cin >> source;
+
     for(int i = 0; i < m; i++)
     {
-        int u, v;
-        cin >> u >> v;
+        int u, v, wt;
+        cin >> u >> v >> wt;
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        adj[u].push_back({v, wt});
+        adj[v].push_back({u, wt});
 
     }    
-        
-    // nodes are from 1 to n // 1 based indexing
-    for(int i = 1; i <= n; i++)
+    
+    // min-heap which stores <dis - node> pair
+    priority_queue<int, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    
+    vector<int>dist(n+1, LLONG_MAX);
+    dist[source] = 0;
+    pq.push({0,source});
+    
+    while(!pq.empty())
     {
-        if(!vis[i])
+        int node = pq.top().S; 
+        int d = pq.top().F; // distance taken to reach this node till now
+        
+        pq.pop();
+
+        for(auto i : adj[node])
         {
-            if(checkForCycle(i,-1))
+            if(i.S + dist[node] < dist[i.F])
             {
-                cout << "Cycle found\n";
-                return ;
+                dist[i.F] = dist[node] + i.S;
+                pq.push({dist[i.F],i.F});
             }
         }
+
     }
     
-    cout << "No Cycle found\n";
+    cout << "Distances from source node are : \n";
+    for(int i = 1; i <= n; i++)
+        cout << dist[i] << " ";
+    cout << endl;
 
 }
 

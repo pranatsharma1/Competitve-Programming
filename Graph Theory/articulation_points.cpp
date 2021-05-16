@@ -76,30 +76,50 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
-vector<int>adj[N];
-vector<bool>vis(N, false);
+// Time Complexity : O(N + E)
+// Space Complexity : O(N + E) + O(N) + O(N)
 
-bool checkForCycle(int node, int parent)
+const int N = 1e5 + 5;
+vector<int> adj[N];
+vector<bool> vis(N, false);
+vector<int>tin(N), low(N);
+int timer = 0;
+vector<bool> isAriculationPoint(N, false);
+
+void dfs(int node, int parent)
 {
-    vis[node] = true;
 
-    for(int i : adj[node])
+    vis[node] = true;
+    tin[node] = low[node] = timer++;
+
+    int child = 0;
+    for(auto i : adj[node])
     {
+        if(i == parent)
+            continue;
+
         if(!vis[i])
         {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
+            dfs(i, node);
+
+            low[node] = min(low[node], low[i]);
+
+            if(low[i] >= tin[node] and parent != -1)
+                isAriculationPoint[node] = true;
+            
+            child ++;
         }
-        else if(i != parent)
-            return true;
+        else
+        {
+            low[node] = min(low[node], tin[i]);
+        }
+
     }
 
-    return false;
+    if(parent == -1 and child > 1)
+        isAriculationPoint[node] = true;
 
-} 
-
+}
 
 void solve()
 {
@@ -115,23 +135,24 @@ void solve()
         adj[u].push_back(v);
         adj[v].push_back(u);
 
-    }    
-        
-    // nodes are from 1 to n // 1 based indexing
+    }
+
     for(int i = 1; i <= n; i++)
     {
         if(!vis[i])
         {
-            if(checkForCycle(i,-1))
-            {
-                cout << "Cycle found\n";
-                return ;
-            }
+            dfs(i, -1);
         }
     }
-    
-    cout << "No Cycle found\n";
 
+    cout << "Articulation points in the  given graph are :\n";
+    for(int i = 1; i <= n; i++)
+    {
+        if(isAriculationPoint[i])
+            cout << i << " ";
+    }
+
+    cout << endl;
 }
 
 int32_t main()

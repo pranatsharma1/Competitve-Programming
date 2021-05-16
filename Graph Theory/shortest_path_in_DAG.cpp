@@ -76,30 +76,28 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
-vector<int>adj[N];
-vector<bool>vis(N, false);
+// Time Complexity : O(N + E) * 2 (for topo sort and then finding the shortest paths)
+// Space Complexity : O(2 * N)
 
-bool checkForCycle(int node, int parent)
+
+const int N = 1e5 + 5;
+vector<pair<int,int>>adj[N];
+vector<bool>vis(N, false);
+stack<int>topo;
+
+void dfs(int node)
 {
     vis[node] = true;
 
-    for(int i : adj[node])
+    for(auto i : adj[node])
     {
-        if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
+        if(!vis[i.F])
+            dfs(i.F);
     }
 
-    return false;
+    topo.push(node);
 
-} 
-
+}
 
 void solve()
 {
@@ -107,30 +105,54 @@ void solve()
     int n, m;
     cin >> n >> m;
 
+    int source;
+    cin >> source;
+
+    // nodes are from 0 to n - 1
     for(int i = 0; i < m; i++)
     {
-        int u, v;
-        cin >> u >> v;
+        int u, v, wt;
+        cin >> u >> v >> wt;
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        adj[u].push_back({v,wt});
 
-    }    
-        
-    // nodes are from 1 to n // 1 based indexing
-    for(int i = 1; i <= n; i++)
+    }        
+
+    for(int i = 0; i < n; i++)
     {
         if(!vis[i])
+            dfs(i);
+    }
+
+    vector<int>dist(n, LLONG_MAX);
+    dist[source] = 0;
+
+    while(!topo.empty())
+    {
+        int node = topo.top();
+        topo.pop();
+
+        // if the node has been reached previously, else the node is unreachable
+        if(dist[node] != LLONG_MAX)       
         {
-            if(checkForCycle(i,-1))
+            for(auto i : adj[node])
             {
-                cout << "Cycle found\n";
-                return ;
+                if(dist[node] + i.S < dist[i.F])
+                    dist[i.F] = dist[node] + i.S;
             }
         }
+
     }
     
-    cout << "No Cycle found\n";
+    cout << "Distances from source " << source << " are :\n"; 
+    for(int i = 0; i < n; i++)
+    {
+        if(dist[i] == LLONG_MAX)
+            cout << "INF ";
+        else
+            cout << dist[i] << " ";
+    }
+    cout << endl;
 
 }
 

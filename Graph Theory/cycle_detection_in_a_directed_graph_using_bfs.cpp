@@ -76,30 +76,9 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
+
 const int N = 1e5 + 7;
 vector<int>adj[N];
-vector<bool>vis(N, false);
-
-bool checkForCycle(int node, int parent)
-{
-    vis[node] = true;
-
-    for(int i : adj[node])
-    {
-        if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
-    }
-
-    return false;
-
-} 
-
 
 void solve()
 {
@@ -107,30 +86,48 @@ void solve()
     int n, m;
     cin >> n >> m;
 
+    vector<int>indegree(n + 1);
     for(int i = 0; i < m; i++)
     {
         int u, v;
         cin >> u >> v;
 
         adj[u].push_back(v);
-        adj[v].push_back(u);
+        indegree[v]++;
 
-    }    
-        
-    // nodes are from 1 to n // 1 based indexing
-    for(int i = 1; i <= n; i++)
-    {
-        if(!vis[i])
-        {
-            if(checkForCycle(i,-1))
-            {
-                cout << "Cycle found\n";
-                return ;
-            }
-        }
     }
     
-    cout << "No Cycle found\n";
+    queue<int>q;
+    // nodes are from 1 to n i.e. 1 based indexing
+    for(int i = 1;  i <= n; i++)
+    {
+        if(indegree[i] == 0)
+            q.push(i);
+    }
+
+    vector<int>topo;
+    while(!q.empty())
+    {
+        int p = q.front();
+        q.pop();
+
+        topo.push_back(p);
+        for(int i : adj[p])
+        {
+            indegree[i]--;
+            if(indegree[i] == 0)
+                q.push(i);
+        }
+
+    }
+
+    if((int)topo.size() == n)   // means topolgical sort is done successfully
+        cout << "No Cycle found\n";
+    else
+        cout << "Cycle found\n";
+
+
+
 
 }
 

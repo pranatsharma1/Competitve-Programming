@@ -80,6 +80,8 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 // there is an edge u -> v, u appears before v in that ordering.
 // Topological sorting can only be done on DAG (Directed Acyclic Graphs).
 
+// Topological sorting using Kahn's Algorithm
+
 const int N = 1e5 + 7;
 vector<int>adj[N];
 vector<bool>vis;
@@ -91,7 +93,7 @@ void solve()
     int n, m;
     cin >> n >> m;
 
-    vector<int>indegree(n+1);
+    vector<int>indegree(n);
 
     for(int i = 0; i < m; i++)
     {
@@ -104,7 +106,9 @@ void solve()
     }
 
     queue<int>q;
-    for(int i = 0; i <= n; i++)
+    
+    // 0 based indexing // nodes are from 0 to n - 1
+    for(int i = 0; i < n; i++)
     {
         if(indegree[i] == 0)
             q.push(i);

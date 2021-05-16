@@ -76,61 +76,71 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
-vector<int>adj[N];
-vector<bool>vis(N, false);
+// Time Complexity : O(m) for m union operations
+// Space Complexity : O(N) + O(N)
 
-bool checkForCycle(int node, int parent)
+const int N = 1e5 + 5;
+vector<int> parent(N);
+vector<int> length(N);
+
+void initializeDSU()
 {
-    vis[node] = true;
-
-    for(int i : adj[node])
+    for(int i = 0; i < N; i++)
     {
-        if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
+        parent[i] = i;
+        length[i] = 1;
+    }
+}
+
+int findPar(int node)
+{
+    if(parent[node] == node)
+        return node;
+    else
+        return parent[node] = findPar(parent[node]);
+}
+
+void Union(int u, int v)
+{
+    u = findPar(u);
+    v = findPar(v);
+
+    if(u != v)
+    {
+        if(length[u] < length[v])
+            swap(u, v);
+
+        parent[v] = u;
+        length[u] += length[v];
     }
 
-    return false;
-
-} 
+}
 
 
 void solve()
 {
 
+    initializeDSU();
+
     int n, m;
     cin >> n >> m;
-
-    for(int i = 0; i < m; i++)
+    for(int i = 1; i <= m; i++)
     {
         int u, v;
         cin >> u >> v;
-
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-
-    }    
         
-    // nodes are from 1 to n // 1 based indexing
-    for(int i = 1; i <= n; i++)
-    {
-        if(!vis[i])
-        {
-            if(checkForCycle(i,-1))
-            {
-                cout << "Cycle found\n";
-                return ;
-            }
-        }
+        Union(u, v);
+        
     }
     
-    cout << "No Cycle found\n";
+    for(int i = 1; i <= n; i++)
+        cout << i << " " << findPar(i) << endl;
+    
+    if(findPar(2) != findPar(7))
+        cout << "They belong to different components\n";
+    else
+        cout << "They belong to same components\n";
+
 
 }
 

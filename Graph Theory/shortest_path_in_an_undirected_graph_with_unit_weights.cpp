@@ -76,30 +76,12 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
+// Time complexity : O(N + E) // N -> nodes and E -> edges
+// Space complexity : O(N) + O(N)   // for dist array and queue
+
+const int N = 1e5 + 5;
 vector<int>adj[N];
 vector<bool>vis(N, false);
-
-bool checkForCycle(int node, int parent)
-{
-    vis[node] = true;
-
-    for(int i : adj[node])
-    {
-        if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
-    }
-
-    return false;
-
-} 
-
 
 void solve()
 {
@@ -107,6 +89,10 @@ void solve()
     int n, m;
     cin >> n >> m;
 
+    int source;
+    cin >> source;
+
+    // nodes are from 0 to n - 1    
     for(int i = 0; i < m; i++)
     {
         int u, v;
@@ -115,22 +101,35 @@ void solve()
         adj[u].push_back(v);
         adj[v].push_back(u);
 
-    }    
-        
-    // nodes are from 1 to n // 1 based indexing
-    for(int i = 1; i <= n; i++)
+    }
+
+    vector<int>dist(n, LLONG_MAX);
+
+    dist[source] = 0;
+    
+    queue<int>q;
+    q.push(source);
+
+    while(!q.empty())
     {
-        if(!vis[i])
+        int node = q.front();
+        q.pop();
+
+        for(int i : adj[node])
         {
-            if(checkForCycle(i,-1))
+            if(dist[node] + 1 < dist[i])
             {
-                cout << "Cycle found\n";
-                return ;
+                dist[i] = dist[node] + 1;
+                q.push(i);
             }
         }
+
     }
-    
-    cout << "No Cycle found\n";
+
+    cout << "Distances of nodes from source " << source << " are :\n";
+    for(int i = 0; i < n; i++)
+        cout << dist[i] << " ";
+    cout << endl;
 
 }
 

@@ -76,30 +76,61 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
-vector<int>adj[N];
-vector<bool>vis(N, false);
+// Time Complexity : O(M*logM) where M is the number of edges
+// Space Complexity : O(M) + O(N) + O(N) == O(N)
 
-bool checkForCycle(int node, int parent)
+struct edge
 {
-    vis[node] = true;
-
-    for(int i : adj[node])
+    int u, v, wt;
+    edge(int x, int y, int weight)
     {
-        if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
+        u = x;
+        v = y;
+        wt = weight;
+    }
+};
+
+const int N = 1e5 + 5;
+vector<int> parent(N);
+vector<int> length(N);
+
+void initializeDSU()
+{
+    for(int i = 0; i < N; i++)
+    {
+        parent[i] = i;
+        length[i] = 1;
+    }
+}
+
+int findPar(int node)
+{
+    if(parent[node] == node)
+        return node;
+    else
+        return parent[node] = findPar(parent[node]);
+}
+
+void Union(int u, int v)
+{
+    u = findPar(u);
+    v = findPar(v);
+
+    if(u != v)
+    {
+        if(length[u] < length[v])
+            swap(u, v);
+
+        parent[v] = u;
+        length[u] += length[v];
     }
 
-    return false;
+}
 
-} 
-
+bool cmp(edge a, edge b)
+{
+    return a.wt < b.wt;
+}
 
 void solve()
 {
@@ -107,30 +138,38 @@ void solve()
     int n, m;
     cin >> n >> m;
 
+    vector<edge>edges;
     for(int i = 0; i < m; i++)
     {
-        int u, v;
-        cin >> u >> v;
+        int u, v, wt;
+        cin >> u >> v >> wt;
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        edges.push_back(edge(u, v, wt));
 
     }    
-        
-    // nodes are from 1 to n // 1 based indexing
-    for(int i = 1; i <= n; i++)
+    
+    sort(edges.begin(), edges.end(), cmp);
+    
+    vector<pair<int,int>>mst;
+    int minCost = 0;
+    
+    initializeDSU();
+    for(int i = 0; i < (int)edges.size(); i++)
     {
-        if(!vis[i])
+        if(findPar(edges[i].u) != findPar(edges[i].v))
         {
-            if(checkForCycle(i,-1))
-            {
-                cout << "Cycle found\n";
-                return ;
-            }
+            minCost += edges[i].wt;
+            mst.push_back({edges[i].u, edges[i].v});
+            Union(edges[i].u, edges[i].v);
         }
     }
     
-    cout << "No Cycle found\n";
+    cout << "MST for the given graph is :\n";
+    for(auto i : mst)
+        cout << i.F << " -- " << i.S << endl;
+    
+    cout << "Cost of this MST is : " << minCost << endl;
+
 
 }
 

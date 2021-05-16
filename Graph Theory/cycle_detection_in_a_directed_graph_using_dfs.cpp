@@ -121,6 +121,7 @@ void solve()
 
     }
     
+    // nodes are from 1 to n
     for(int i = 1; i <= n; i++)
     {
         if(!vis[i])

@@ -76,30 +76,37 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-const int N = 1e5 + 7;
+const int N = 1e5 + 5;
 vector<int>adj[N];
 vector<bool>vis(N, false);
+stack<int>topo;
 
-bool checkForCycle(int node, int parent)
+void dfs(int node)
 {
     vis[node] = true;
 
-    for(int i : adj[node])
+    for(auto i : adj[node])
     {
         if(!vis[i])
-        {
-            vis[i] = true;
-            if(checkForCycle(i, node))
-                return true;
-        }
-        else if(i != parent)
-            return true;
+            dfs(i);
     }
 
-    return false;
+    topo.push(node);
 
-} 
+}
 
+void revDfs(int node, vector<int> transpose[])
+{
+    cout << node << " ";
+    vis[node] = true;
+
+    for(auto i : transpose[node])
+    {
+        if(!vis[i])
+            revDfs(i, transpose);
+    }
+
+}
 
 void solve()
 {
@@ -113,24 +120,39 @@ void solve()
         cin >> u >> v;
 
         adj[u].push_back(v);
-        adj[v].push_back(u);
 
-    }    
-        
-    // nodes are from 1 to n // 1 based indexing
+    }
+
+    // finding the topological sorting of the graph
     for(int i = 1; i <= n; i++)
     {
         if(!vis[i])
-        {
-            if(checkForCycle(i,-1))
-            {
-                cout << "Cycle found\n";
-                return ;
-            }
-        }
+            dfs(i);
+    }
+
+    // Finding the transpose of the graph
+    vector<int>transpose[N];
+    for(int i = 1; i <= n; i++)
+    {
+        vis[i] = 0;
+        for(auto j : adj[i])
+            transpose[j].push_back(i);
     }
     
-    cout << "No Cycle found\n";
+    // Finding the SCC with the help of topological sorting
+    cout << "SCCs of the given graph are : \n";
+    while(!topo.empty())
+    {
+        int node = topo.top();
+        topo.pop();
+
+        if(!vis[node])
+        {
+            revDfs(node, transpose);
+            cout << endl;
+        }
+    }
+
 
 }
 
