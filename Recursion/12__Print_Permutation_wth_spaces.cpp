@@ -76,66 +76,44 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-// Time Complexity of this approach is more than O(N^2) since we are iterating on the key array N times
 
-const int N = 1e5 + 5;
-vector<pair<int,int>>adj[N];
+void find_permutation(string ip, string op)
+{
+
+    if((int)ip.size() == 0)
+    {
+        cout << op << endl;
+        return ;
+    }
+
+    string op1 = op;
+    string op2 = op;
+
+    op1.push_back('_');
+    op1.push_back(ip[0]);
+    op2.push_back(ip[0]);
+
+    ip.erase(ip.begin());
+
+    find_permutation(ip, op1);
+    find_permutation(ip, op2);
+
+}
 
 void solve()
 {
 
-    int n, m;
-    cin >> n >> m;
+    string ip;
+    cin >> ip;
 
-    // nodes are from 0 to n - 1
-    for(int i = 0; i < m; i++)
-    {
-        int u, v, wt;
-        cin >> u >> v >> wt;    // 0 - based indexing
+    string op = "";
+    op.push_back(ip[0]);
 
-        adj[u].push_back({v, wt});
-        adj[v].push_back({u, wt});
+    ip.erase(ip.begin());
 
-    }        
+    find_permutation(ip, op);    
 
-    vector<int>key(n, LLONG_MAX);   // stores the distance taken from any other node to reach this node.
-    vector<bool>marked(n, false);   // included in MST or not
-    vector<int>parent(n, -1);
 
-    key[0] = 0; // because, we always take first node as part of MST
-    parent[0] = -1;
-
-    for(int i = 0; i < n - 1; i++) // it runs only n - 1 times because MST contains only n - 1 edges
-    {
-        // finding the next node to be included in MST
-        int mn = LLONG_MAX, node;
-        for(int j = 0; j < n; j++)
-        {
-            if(marked[j] == false and key[j] <= mn)
-                mn = key[j], node = j;
-        }
-        
-        marked[node] = true;    
-        
-        for(auto j : adj[node])
-        {
-            if(marked[j.F] == false and j.S < key[j.F])
-                key[j.F] = j.S, parent[j.F] = node;
-        }
-
-    }
-
-    cout << "MST of the given graph is :\n";
-    for(int i = 1; i < n; i++)
-        cout << parent[i] << " -- " << i << endl;
-    
-    int minCost = 0;
-    for(int i = 1; i < n; i++)
-    {
-        if(key[i] != LLONG_MAX)
-            minCost += key[i];
-    }
-    cout << "Cost of the MST is : " << minCost << endl;
 
 }
 

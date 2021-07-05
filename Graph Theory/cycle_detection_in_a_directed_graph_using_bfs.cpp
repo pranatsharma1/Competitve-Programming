@@ -76,6 +76,8 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
+// Time Complexity: O(N + E) for topological sort
+// Space Complexity: O(N + E) for adjacency list + O(N) for queue + O(N) for indegree
 
 const int N = 1e5 + 7;
 vector<int>adj[N];

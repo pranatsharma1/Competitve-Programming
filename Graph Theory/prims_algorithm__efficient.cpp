@@ -98,16 +98,16 @@ void solve()
 
     }    
 
-    vector<int>key(n, LLONG_MAX);
-    vector<bool>marked(n, false);
+    vector<int>key(n, LLONG_MAX);   // stores the distance taken from any other node to reach this node.
+    vector<bool>marked(n, false);   // included in MST or not
     vector<int>parent(n, -1);
-
+    
     priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>>pq;
     key[0] = 0;
     parent[0] = -1;
-
+    
     pq.push({0, 0});    // dist - node
-
+    
     while(!pq.empty())
     {
         int node = pq.top().S;

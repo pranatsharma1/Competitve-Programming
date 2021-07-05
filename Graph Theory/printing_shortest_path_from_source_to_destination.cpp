@@ -76,10 +76,8 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-// Time Complexity of this approach is more than O(N^2) since we are iterating on the key array N times
 
-const int N = 1e5 + 5;
-vector<pair<int,int>>adj[N];
+
 
 void solve()
 {
@@ -87,55 +85,65 @@ void solve()
     int n, m;
     cin >> n >> m;
 
-    // nodes are from 0 to n - 1
+
+    vector<pair<int,int>>adj[n + 1];
     for(int i = 0; i < m; i++)
     {
         int u, v, wt;
-        cin >> u >> v >> wt;    // 0 - based indexing
+        cin >> u >> v >> wt;
 
         adj[u].push_back({v, wt});
         adj[v].push_back({u, wt});
 
-    }        
-
-    vector<int>key(n, LLONG_MAX);   // stores the distance taken from any other node to reach this node.
-    vector<bool>marked(n, false);   // included in MST or not
-    vector<int>parent(n, -1);
-
-    key[0] = 0; // because, we always take first node as part of MST
-    parent[0] = -1;
-
-    for(int i = 0; i < n - 1; i++) // it runs only n - 1 times because MST contains only n - 1 edges
-    {
-        // finding the next node to be included in MST
-        int mn = LLONG_MAX, node;
-        for(int j = 0; j < n; j++)
-        {
-            if(marked[j] == false and key[j] <= mn)
-                mn = key[j], node = j;
-        }
-        
-        marked[node] = true;    
-        
-        for(auto j : adj[node])
-        {
-            if(marked[j.F] == false and j.S < key[j.F])
-                key[j.F] = j.S, parent[j.F] = node;
-        }
-
     }
 
-    cout << "MST of the given graph is :\n";
-    for(int i = 1; i < n; i++)
-        cout << parent[i] << " -- " << i << endl;
+    // here source is 1 and destination is n
+    vector<int>dist(n + 1, LLONG_MAX);
+    dist[1] = 0;
+
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>>pq;
+    pq.push({0, 1});
+
+    vector<int>parent(n + 1, -1);
+    parent[1] = 1;
+    while(!pq.empty())
+    {
+        int d = pq.top().F;
+        int prev = pq.top().S;
+
+        pq.pop();
+
+        for(auto i : adj[prev])
+        {
+            if(dist[prev] + i.S < dist[i.F])
+            {
+                dist[i.F] = dist[prev] + i.S;
+                parent[i.F] = prev;
+                pq.push({dist[i.F], i.F});
+            }
+        }
+    }
+
+    if(dist[n] == LLONG_MAX)
+    {
+        cout << -1 << endl; // no path exists
+        return ;
+    }
+
+    vector<int>path;
     
-    int minCost = 0;
-    for(int i = 1; i < n; i++)
+    int cur = n;    // because destination is n
+    while(cur != 1)
     {
-        if(key[i] != LLONG_MAX)
-            minCost += key[i];
+        path.push_back(cur);
+        cur = parent[cur];
     }
-    cout << "Cost of the MST is : " << minCost << endl;
+    path.push_back(1);
+
+    reverse(path.begin(), path.end());
+    for(auto i : path)
+        cout << i << " ";
+    cout << endl;
 
 }
 

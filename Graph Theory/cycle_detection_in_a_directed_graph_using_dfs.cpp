@@ -76,6 +76,10 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
+// Time Complexity: O(N + E) for DFS call
+// Space Complexity: O(N + E) for adjacency list + O(N) for vis + O(N) for dfs_vis
+// Auxilary Space Complexity : O(N) for dfs call
+
 const int N = 1e5 + 7;
 vector<int> adj[N];
 vector<bool>vis(N, false);

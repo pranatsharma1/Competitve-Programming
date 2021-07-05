@@ -76,66 +76,48 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 //------------------------Highly Sophisticated Code Starts----------------------//
 
-// Time Complexity of this approach is more than O(N^2) since we are iterating on the key array N times
 
-const int N = 1e5 + 5;
-vector<pair<int,int>>adj[N];
+void delete_element(stack<int>& s, int k)
+{
+    if((int)s.size() == k)
+    {
+        s.pop();
+        return ;
+    }
+
+    int x = s.top();
+    s.pop();
+
+    delete_element(s, k);
+    s.push(x);
+
+}
 
 void solve()
 {
 
-    int n, m;
-    cin >> n >> m;
+    int n;
+    cin >> n;
 
-    // nodes are from 0 to n - 1
-    for(int i = 0; i < m; i++)
+    stack<int>s;
+    for(int i = 0; i < n; i++)
     {
-        int u, v, wt;
-        cin >> u >> v >> wt;    // 0 - based indexing
-
-        adj[u].push_back({v, wt});
-        adj[v].push_back({u, wt});
-
-    }        
-
-    vector<int>key(n, LLONG_MAX);   // stores the distance taken from any other node to reach this node.
-    vector<bool>marked(n, false);   // included in MST or not
-    vector<int>parent(n, -1);
-
-    key[0] = 0; // because, we always take first node as part of MST
-    parent[0] = -1;
-
-    for(int i = 0; i < n - 1; i++) // it runs only n - 1 times because MST contains only n - 1 edges
-    {
-        // finding the next node to be included in MST
-        int mn = LLONG_MAX, node;
-        for(int j = 0; j < n; j++)
-        {
-            if(marked[j] == false and key[j] <= mn)
-                mn = key[j], node = j;
-        }
-        
-        marked[node] = true;    
-        
-        for(auto j : adj[node])
-        {
-            if(marked[j.F] == false and j.S < key[j.F])
-                key[j.F] = j.S, parent[j.F] = node;
-        }
-
+        int x;
+        cin >> x;
+        s.push(x);
     }
-
-    cout << "MST of the given graph is :\n";
-    for(int i = 1; i < n; i++)
-        cout << parent[i] << " -- " << i << endl;
     
-    int minCost = 0;
-    for(int i = 1; i < n; i++)
+    int k = (int)s.size() / 2 + 1;  // middle element is kth element from bottom of the stack.
+
+    delete_element(s, k);
+
+    while(!s.empty())
     {
-        if(key[i] != LLONG_MAX)
-            minCost += key[i];
+        int x = s.top();
+        cout << x << " ";
+        s.pop();
     }
-    cout << "Cost of the MST is : " << minCost << endl;
+
 
 }
 
