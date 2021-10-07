@@ -104,8 +104,8 @@ void solve()
     
     // min-heap which stores <dis - node> pair
     priority_queue<int, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-    
-    vector<int>dist(n+1, LLONG_MAX);
+        
+    vector<int>dist(n + 1, LLONG_MAX);
     dist[source] = 0;
     pq.push({0,source});
     
@@ -128,7 +128,7 @@ void solve()
     }
     
     cout << "Distances from source node are : \n";
-    for(int i = 1; i <= n; i++)
+    for(int i = 0; i < n; i++)
         cout << dist[i] << " ";
     cout << endl;
 
