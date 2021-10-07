@@ -1,0 +1,25 @@
+1. DFS
+2. BFS
+
+3. Connected Components using DFS
+4. Connected Components using BFS
+
+5. Cycle Detection in an Undirected Graph using BFS (Kahn's Algo)
+6. Cycle Detection in an Undirected Graph using DFS
+
+7. Bipartite Graph check using BFS (Graph Coloring)
+8. Bipartite Graph check using DFS
+
+9. Shortest Path in undirected graph with unit weights.
+10. Shortest Path in DAG (Directed Acyclic Graph)
+11. Dijkstra's Algorithm (Shortest path in undirected graphs)
+
+12. MST using Prim's ALgorithm
+13. MST using Kruskal's Algorithm
+
+14. DSU
+
+15. Bridges in a graph
+16. Articulation Points
+17. Kosaraju's Algorithm
+18. Bellman Ford Algorithm
